@@ -23,15 +23,25 @@ class Registration extends React.Component {
     const passwordHash = new SHA3(512)
     passwordHash.update(this.state.password);
 
-    fetch("https://localhost:8080/", {
+    fetch("http://192.168.0.131:8080/post/register", {
       method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: {
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
         "username": this.state.username,
         "password": passwordHash.digest('hex')
-      }
-    }).then( result => {
+      })
+    })
+    .then( result => result.json())
+    .then( result => {
+      console.log("Response: " );
       console.log(result);
+    })
+    .catch( error => {
+      console.log("Fetch Error: " + error);
+      return error;
     });
   }
 
