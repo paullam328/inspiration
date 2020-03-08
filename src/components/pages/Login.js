@@ -2,7 +2,7 @@ import React from 'react';
 import { Text,TextInput, StyleSheet, View, Button } from 'react-native';
 import { SHA3 } from 'sha3';
 
-class Registration extends React.Component {
+class Login extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -19,11 +19,11 @@ class Registration extends React.Component {
     this.setState({password: text});
   }
 
-  onRegisterAccount = () => {
+  onLogin = () => {
     const passwordHash = new SHA3(512)
     passwordHash.update(this.state.password);
 
-    fetch("http://192.168.0.131:8080/post/register", {
+    fetch("http://192.168.0.131:8080/post/login", {
       method: 'post',
       headers: new Headers({
         'Accept': 'application/json',
@@ -52,7 +52,7 @@ class Registration extends React.Component {
       <View style={{ flex: 6, alignItems: "stretch"}}>
         <View style={{ flex: 1}}></View>
         <View style={{ flex: 1, alignItems:"center" }}>
-          <Text style={{fontWeight:"bold", fontSize:30}}>Create Account</Text>
+          <Text style={{fontWeight:"bold", fontSize:30}}>Login</Text>
         </View>
         <View style={{ flex: 1, alignSelf: "stretch"}}>
           <TextInput style={inputStyles.container}
@@ -69,12 +69,12 @@ class Registration extends React.Component {
           />
         </View>
         <View style={{ flex: 1, margin:50 }}>
-            <View style={{ flex: 2 }}>
-              <Button title="Register" onPress={this.onRegisterAccount}></Button>
+            <View style={{ flex: 2}}>
+              <Button title="Login" onPress={this.onLogin}></Button>
             </View>
             <View style={{ flex: 0.5 }} />
             <View style={{ flex: 2 }}>
-              <Button title="Back To Login Page" onPress={()=> this.props.navigation.navigate('Login', {name: 'Login'})}></Button>
+              <Button  title="Create New Account" onPress={()=> this.props.navigation.navigate('Registration', {name: 'Registration'})}></Button>
             </View>
         </View>
 
@@ -89,4 +89,4 @@ const inputStyles = StyleSheet.create({
   container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10}
 })
 
-export default Registration;
+export default Login;

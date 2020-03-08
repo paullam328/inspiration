@@ -1,6 +1,14 @@
 import React from 'react';
-import Registration from './src/components/pages/Registration'
+import Registration from './src/components/pages/Registration';
+import Login from './src/components/pages/Login'
 import { StyleSheet, Text, View, NativeModules } from 'react-native';
+
+//Navigation (Routing...)
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+//import { Router, Stack, Scene } from 'react-native-router-flux';
 
 // if (__DEV__) {
 //   NativeModules.DevSettings.toggleElementInspector()
@@ -9,6 +17,8 @@ import { StyleSheet, Text, View, NativeModules } from 'react-native';
 //   NativeModules.DevSettings.setHotLoadingEnabled(true)
 // }
 
+const Stack = createStackNavigator();
+
 class App extends React.Component {
   // componentDidMount()
   // {
@@ -16,12 +26,20 @@ class App extends React.Component {
   // }
   render() {
     return (
-      <Registration />
-    );
+      <NavigationContainer>
+        <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login}/>
+          <Stack.Screen name="Registration" component={Registration}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
     /*  
-        <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        </View>
+<Router>
+        <Stack key="root">
+          <Scene key="registration" component={Registration} title="registration" />
+        </Stack>
+      </Router>
+
       */
   }
 }
