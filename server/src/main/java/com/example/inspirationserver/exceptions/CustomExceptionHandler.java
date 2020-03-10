@@ -12,11 +12,21 @@ public class CustomExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorResponse handleUsernameAlreadyExistException(UsernameAlreadyExistException ex) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.FORBIDDEN.value());
-        errorResponse.setMessage("Username Already Exist!");
-        return errorResponse;
+    public CustomResponse handleUsernameAlreadyExistException(UsernameAlreadyExistException ex) {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setCode(HttpStatus.FORBIDDEN.value());
+        customResponse.setMessage("Username Already Exist!");
+        return customResponse;
+    }
+
+    @ExceptionHandler(NoSuchUserException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public CustomResponse handleNoSuchUserException(NoSuchUserException ex) {
+        CustomResponse customResponse = new CustomResponse();
+        customResponse.setCode(HttpStatus.FORBIDDEN.value());
+        customResponse.setMessage("Invalid Username/Password!");
+        return customResponse;
     }
 }
 

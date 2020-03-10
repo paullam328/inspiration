@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text,TextInput, StyleSheet, View, Button } from 'react-native';
 import { SHA3 } from 'sha3';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 class Login extends React.Component {
   constructor(props) {
@@ -36,11 +37,17 @@ class Login extends React.Component {
     })
     .then( result => result.json())
     .then( result => {
-      console.log("Response: " );
-      console.log(result);
+      if (result.code == 200) {
+        this.props.showToast(result.code + ": " + result.message);
+      } else if (result.code == 403) {
+        this.props.showToast(result.code + ": " + result.message);
+      }
+
     })
     .catch( error => {
       console.log("Fetch Error: " + error);
+
+      //Toast.show(result.message);
       return error;
     });
   }
@@ -49,10 +56,12 @@ class Login extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 6, alignItems: "stretch"}}>
-        <View style={{ flex: 1}}></View>
-        <View style={{ flex: 1, alignItems:"center" }}>
-          <Text style={{fontWeight:"bold", fontSize:30}}>Login</Text>
+      <View style={inputStyles.outlook}>
+        <View style={{ flex: 1, alignItems:"center"}}>
+          <Text style={inputStyles.header}>Inspire</Text>
+        </View>
+
+        <View style={{ flex: 1 }}>
         </View>
         <View style={{ flex: 1, alignSelf: "stretch"}}>
           <TextInput style={inputStyles.container}
@@ -70,23 +79,34 @@ class Login extends React.Component {
         </View>
         <View style={{ flex: 1, margin:50 }}>
             <View style={{ flex: 2}}>
-              <Button title="Login" onPress={this.onLogin}></Button>
+              <Button 
+                title="Login" 
+                onPress={this.onLogin}
+                color="#00BFFF"></Button>
             </View>
-            <View style={{ flex: 0.5 }} />
+            <View style={{ flex: 1 }} />
             <View style={{ flex: 2 }}>
-              <Button  title="Create New Account" onPress={()=> this.props.navigation.navigate('Registration', {name: 'Registration'})}></Button>
+              <Button  
+                title="Create New Account" 
+                onPress={()=> this.props.navigation.navigate('Registration', {name: 'Registration'})}
+                color="#00BFFF"></Button>
             </View>
         </View>
 
         <View style={{ flex: 1 }}></View>
       </View>
       
+
     );
   }//flex grid: 6 horizontal
 }
 
 const inputStyles = StyleSheet.create({
-  container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10}
+  container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10, backgroundColor: "white"},
+  outlook: { backgroundColor: "orange", color: "white",  flex: 6, alignItems: "stretch"},
+  header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" },
+  button: { backgroundColor: "blue" }
 })
+//so apparently, bold conflicts with fontfamily...
 
 export default Login;

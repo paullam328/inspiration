@@ -1,15 +1,15 @@
 package com.example.inspirationserver.exceptions;
 
-public class ErrorResponse {
-    public int getErrorCode() {
-        return errorCode;
+public class CustomResponse {
+    public int getCode() {
+        return code;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    private int errorCode;
+    private int code;
     private String message;
 
     public String getMessage() {

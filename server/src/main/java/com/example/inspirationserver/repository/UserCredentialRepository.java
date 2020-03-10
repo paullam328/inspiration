@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-//Request Spring to modify records:
+
 @Service
 public interface UserCredentialRepository extends CrudRepository<UserCredential, Integer> {
 
@@ -19,5 +20,10 @@ public interface UserCredentialRepository extends CrudRepository<UserCredential,
     @Modifying
     @Query("SELECT username FROM UserCredential WHERE username = :username")
     ArrayList<?> getSameUserCredential(@Param("username") String username);
+
+    @Transactional
+    @Modifying
+    @Query("SELECT id, username, password FROM UserCredential WHERE username = :username AND password = :password")
+    ArrayList<Map<String, Object>> getMatchedUsernamePasswordCredential(@Param("username") String username, @Param("password") String password);
 
 }
