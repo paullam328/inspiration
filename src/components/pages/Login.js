@@ -39,6 +39,7 @@ class Login extends React.Component {
     .then( result => {
       if (result.code == 200) {
         this.props.showToast(result.code + ": " + result.message);
+        this.props.setIsLoggedIn(true);
       } else if (result.code == 403) {
         this.props.showToast(result.code + ": " + result.message);
       }

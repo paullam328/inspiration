@@ -1,7 +1,8 @@
 import React from 'react';
 import Registration from './src/components/pages/Registration';
 import Login from './src/components/pages/Login'
-import { StyleSheet, Text, View, NativeModules, ToastAndroid } from 'react-native';
+import Decision from './src/components/pages/Decision'
+import { StyleSheet, Text, View, NativeModules, ToastAndroid, processColor } from 'react-native';
 
 //Navigation (Routing...)
 import 'react-native-gesture-handler';
@@ -12,29 +13,20 @@ import ToastAndroidCustomized from './src/components/parts/ToastAndroidCustomize
 
 import * as Font from 'expo-font'
 
+import {EventEmitter} from 'events';
+
 //Storing for front-end data + local storage
-//import { createStore } from 'redux';
+import { createStore } from 'redux';
 //import { persistStore, persistReducer, persistGate } from 'redux-persist';
 //import storage from 'redux-persist/lib/storage';
 //import { PersistGate } from 'redux-persist/integration/react'
 
 //import { Router, Stack, Scene } from 'react-native-router-flux';
 
-// if (__DEV__) {
-//   NativeModules.DevSettings.toggleElementInspector()
-//   NativeModules.DevSettings.setIsDebuggingRemotely(true)
-//   NativeModules.DevSettings.setLiveReloadEnabled(true)
-//   NativeModules.DevSettings.setHotLoadingEnabled(true)
-// }
-
 const Stack = createStackNavigator();
 
 
 class App extends React.Component {
-  // componentDidMount()
-  // {
-  //   console.log("mount");
-  // }
 
   constructor(props) {
     super(props);
@@ -47,19 +39,18 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
+    
+
+
     console.log("rendering...");
     await Font.loadAsync({
       'AdillaAndRita': require('./assets/fonts/AdillaAndRita.ttf'),
     });
     console.log("loaded...");
+    //EventEmitter.setMaxListeners(100);
     this.setState({isFontLoaded:true});
   }
 
-  isLoggedInSwitchPages() { // so page handler deal with 
-
-  }
-
-  
   showToast = (msg) => {
     //this.refs.toast.show(msg, DURATION.LENGTH_SHORT);
     this.setState(
@@ -78,18 +69,47 @@ class App extends React.Component {
 
   }
 
+  setIsLoggedIn = (bool) => {
+    //this.refs.toast.show(msg, DURATION.LENGTH_SHORT);
+    this.setState(
+      {
+        isLoggedIn: bool
+      }
+    )
+  }
+
+  pageRendererOnLogin() {
+    if (!this.state.isLoggedIn) {
+      return (
+        <>
+          <Stack.Screen name="Login">
+            { (props) => <Login {... props} showToast={this.showToast} setIsLoggedIn={this.setIsLoggedIn} />}
+          </Stack.Screen>
+          <Stack.Screen  name="Registration">
+            { (props) => <Registration {... props} showToast={this.showToast} />}
+          </Stack.Screen>
+        </>
+              
+      )
+    }
+    else {
+      //Protected routes pattern:
+      //our screens which need the user to be logged in are "protected" 
+      //and cannot be navigated to by other means if the user is not logged in.
+      return(
+        <Stack.Screen  name="Decision" component={Decision}>
+        </Stack.Screen>
+      )
+    }
+  }
+
   render() {
     if (this.state.isFontLoaded) {
       return (
         <View style={{ flex: 1 }}>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen name="Login">
-                { (props) => <Login {... props} showToast={this.showToast} />}
-              </Stack.Screen>
-              <Stack.Screen  name="Registration">
-                { (props) => <Registration {... props} showToast={this.showToast} />}
-              </Stack.Screen>
+              {this.pageRendererOnLogin()}
             </Stack.Navigator>
           </NavigationContainer>
           
