@@ -11,15 +11,23 @@
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
+    "dns": "^0.2.2",
     "events": "^3.1.0",
     "expo": "~36.0.0",
     "expo-font": "^8.0.0",
+    "internal-ip": "^6.0.0",
+    "ip": "^1.1.5",
+    "myip-react": "^1.1.1",
+    "os": "^0.1.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
+    "react-ip": "^1.1.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-devsettings-android": "^0.3.0",
     "react-native-easy-toast": "^1.2.0",
     "react-native-gesture-handler": "~1.5.0",
+    "react-native-network-info": "^5.2.1",
+    "react-native-public-ip": "^1.0.2",
     "react-native-reanimated": "~1.4.0",
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "^0.7.3",
@@ -35,8 +43,9 @@
     "sha3": "^2.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "babel-preset-expo": "~8.0.0",
-    "@babel/core": "^7.0.0"
+    "local-ip-url": "^1.0.2"
   },
   "private": true
 }

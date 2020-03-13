@@ -2,7 +2,7 @@ import React from 'react';
 import Registration from './src/components/pages/Registration';
 import Login from './src/components/pages/Login'
 import Decision from './src/components/pages/Decision'
-import { StyleSheet, Text, View, NativeModules, ToastAndroid, processColor } from 'react-native';
+import { StyleSheet, Text, View, NativeModules, ToastAndroid, processColor, Platform } from 'react-native';
 
 //Navigation (Routing...)
 import 'react-native-gesture-handler';
@@ -14,6 +14,7 @@ import ToastAndroidCustomized from './src/components/parts/ToastAndroidCustomize
 import * as Font from 'expo-font'
 
 import {EventEmitter} from 'events';
+import Toast from 'react-native-easy-toast'
 
 //Storing for front-end data + local storage
 import { createStore } from 'redux';
@@ -52,7 +53,9 @@ class App extends React.Component {
   }
 
   showToast = (msg) => {
-    //this.refs.toast.show(msg, DURATION.LENGTH_SHORT);
+    if (Platform.OS === "ios")
+      this.refs.toast.show(msg);
+
     this.setState(
       {
         toastMsg: msg,
@@ -70,7 +73,6 @@ class App extends React.Component {
   }
 
   setIsLoggedIn = (bool) => {
-    //this.refs.toast.show(msg, DURATION.LENGTH_SHORT);
     this.setState(
       {
         isLoggedIn: bool
@@ -103,6 +105,14 @@ class App extends React.Component {
     }
   }
 
+  renderToast() {
+    if (Platform.OS === 'ios') {
+        return <Toast ref="toast"></Toast>
+    } else {
+        return <ToastAndroidCustomized visible={this.state.isToastVisible} message={this.state.toastMsg} style={styles.toast}/>
+    }
+  }
+
   render() {
     if (this.state.isFontLoaded) {
       return (
@@ -112,8 +122,8 @@ class App extends React.Component {
               {this.pageRendererOnLogin()}
             </Stack.Navigator>
           </NavigationContainer>
-          
-          <ToastAndroidCustomized visible={this.state.isToastVisible} message={this.state.toastMsg} style={styles.toast}/>
+          {this.renderToast()}
+
         </View>
       )
     } else {

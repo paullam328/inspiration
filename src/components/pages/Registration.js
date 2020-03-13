@@ -1,7 +1,9 @@
 import React from 'react';
-import { Text,TextInput, StyleSheet, View, Button } from 'react-native';
+import { Text,TextInput, StyleSheet, View, Button, Platform, TouchableOpacity } from 'react-native';
 import { SHA3 } from 'sha3';
 import Toast, {DURATION} from 'react-native-easy-toast';
+import PlatformSpecificButton from '../parts/PlatformSpecificButton';
+import { ipAddr } from '../../config/ip'
 
 class Registration extends React.Component {
   constructor(props) {
@@ -24,7 +26,7 @@ class Registration extends React.Component {
     const passwordHash = new SHA3(512)
     passwordHash.update(this.state.password);
 
-    fetch("http://192.168.0.131:8080/post/register", {
+    fetch(`http://${ipAddr}:8080/post/register`, {
       method: 'post',
       headers: new Headers({
         'Accept': 'application/json',
@@ -75,17 +77,18 @@ class Registration extends React.Component {
         </View>
         <View style={{ flex: 1, margin:50 }}>
             <View style={{ flex: 2 }}>
-              <Button 
-                title="Register" 
-                onPress={this.onRegisterAccount}
-                color="orange"></Button>
+              
+                <PlatformSpecificButton
+                  buttonAction={this.onRegisterAccount}
+                  buttonText="Register"
+                  buttonColor="orange" />
             </View>
             <View style={{ flex: 1 }} />
             <View style={{ flex: 2 }}>
-              <Button 
-                title="Back To Login Page" 
-                onPress={()=> this.props.navigation.navigate('Login', {name: 'Login'})}
-                color="orange"></Button>
+              <PlatformSpecificButton
+                    buttonAction={()=> this.props.navigation.navigate('Login', {name: 'Login'})}
+                    buttonText="Back To Login Page"
+                    buttonColor="orange" />
             </View>
         </View>
 
@@ -102,7 +105,7 @@ class Registration extends React.Component {
 const inputStyles = StyleSheet.create({
   container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10, backgroundColor: "white"},
   outlook: { backgroundColor: "#00BFFF", color: "white",  flex: 6, alignItems: "stretch" },
-  header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" }
+  header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" },
 })
 
 export default Registration;

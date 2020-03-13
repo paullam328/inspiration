@@ -1,7 +1,11 @@
+'use strict'
+
 import React from 'react';
-import { Text,TextInput, StyleSheet, View, Button } from 'react-native';
+import { Text,TextInput, StyleSheet, View, Button, TouchableOpacity, Platform } from 'react-native';
 import { SHA3 } from 'sha3';
 import Toast, {DURATION} from 'react-native-easy-toast';
+import PlatformSpecificButton from '../parts/PlatformSpecificButton';
+import { ipAddr } from '../../config/ip'
 
 class Login extends React.Component {
   constructor(props) {
@@ -24,7 +28,10 @@ class Login extends React.Component {
     const passwordHash = new SHA3(512)
     passwordHash.update(this.state.password);
 
-    fetch("http://192.168.0.131:8080/post/login", {
+    //Only browser-based js can fetch local address
+    //and unnecessary since online servers will be used
+    console.log(ipAddr);
+    fetch(`http://${ipAddr}:8080/post/login`, {
       method: 'post',
       headers: new Headers({
         'Accept': 'application/json',
@@ -51,19 +58,17 @@ class Login extends React.Component {
       //Toast.show(result.message);
       return error;
     });
-  }
+}
 
   /*TODO:SHA-3 HASING IMPLEMENTATION!*/
 
   render() {
     return (
       <View style={inputStyles.outlook}>
-        <View style={{ flex: 1, alignItems:"center"}}>
+        <View style={{ flex: 2, alignItems:"center"}}>
           <Text style={inputStyles.header}>Inspire</Text>
         </View>
 
-        <View style={{ flex: 1 }}>
-        </View>
         <View style={{ flex: 1, alignSelf: "stretch"}}>
           <TextInput style={inputStyles.container}
             onChangeText={text => this.onChangeUsernameText(text)}
@@ -80,17 +85,17 @@ class Login extends React.Component {
         </View>
         <View style={{ flex: 1, margin:50 }}>
             <View style={{ flex: 2}}>
-              <Button 
-                title="Login" 
-                onPress={this.onLogin}
-                color="#00BFFF"></Button>
+              <PlatformSpecificButton  
+                  buttonText="Login" 
+                  buttonAction={this.onLogin}
+                  buttonColor="#00BFFF" />
             </View>
             <View style={{ flex: 1 }} />
-            <View style={{ flex: 2 }}>
-              <Button  
-                title="Create New Account" 
-                onPress={()=> this.props.navigation.navigate('Registration', {name: 'Registration'})}
-                color="#00BFFF"></Button>
+            <View style={{ flex: 2 }}>                    
+              <PlatformSpecificButton  
+                buttonText="Create New Account" 
+                buttonAction={()=> this.props.navigation.navigate('Registration', {name: 'Registration'})}
+                buttonColor="#00BFFF" />
             </View>
         </View>
 
@@ -105,8 +110,7 @@ class Login extends React.Component {
 const inputStyles = StyleSheet.create({
   container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10, backgroundColor: "white"},
   outlook: { backgroundColor: "orange", color: "white",  flex: 6, alignItems: "stretch"},
-  header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" },
-  button: { backgroundColor: "blue" }
+  header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" }
 })
 //so apparently, bold conflicts with fontfamily...
 
