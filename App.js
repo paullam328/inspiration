@@ -1,30 +1,18 @@
 import React from 'react';
-import Registration from './src/components/pages/Registration';
-import Login from './src/components/pages/Login'
-import Decision from './src/components/pages/Decision'
 import { StyleSheet, Text, View, NativeModules, ToastAndroid, processColor, Platform } from 'react-native';
-
-//Navigation (Routing...)
-import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import ToastAndroidCustomized from './src/components/parts/ToastAndroidCustomized'
 
 import * as Font from 'expo-font'
 
-import {EventEmitter} from 'events';
+//import {EventEmitter} from 'events';
 import Toast from 'react-native-easy-toast'
 
 //Storing for front-end data + local storage
-import { createStore } from 'redux';
-//import { persistStore, persistReducer, persistGate } from 'redux-persist';
-//import storage from 'redux-persist/lib/storage';
-//import { PersistGate } from 'redux-persist/integration/react'
-
-//import { Router, Stack, Scene } from 'react-native-router-flux';
-
-const Stack = createStackNavigator();
+import { persistor, store } from './src/config/store';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import { Provider } from 'react-redux';
+import AppNavigator from './src/components/AppNavigator';
 
 
 class App extends React.Component {
@@ -32,17 +20,14 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
       isToastVisible: false,
       toastMsg: "",
-      isFontLoaded: false
+      isFontLoaded: false,
+      storedToken: ""
     }
   }
 
   async componentDidMount() {
-    
-
-
     console.log("rendering...");
     await Font.loadAsync({
       'AdillaAndRita': require('./assets/fonts/AdillaAndRita.ttf'),
@@ -68,41 +53,6 @@ class App extends React.Component {
         },
       );
    })
-   console.log(this.state.isToastVisible)
-
-  }
-
-  setIsLoggedIn = (bool) => {
-    this.setState(
-      {
-        isLoggedIn: bool
-      }
-    )
-  }
-
-  pageRendererOnLogin() {
-    if (!this.state.isLoggedIn) {
-      return (
-        <>
-          <Stack.Screen name="Login">
-            { (props) => <Login {... props} showToast={this.showToast} setIsLoggedIn={this.setIsLoggedIn} />}
-          </Stack.Screen>
-          <Stack.Screen  name="Registration">
-            { (props) => <Registration {... props} showToast={this.showToast} />}
-          </Stack.Screen>
-        </>
-              
-      )
-    }
-    else {
-      //Protected routes pattern:
-      //our screens which need the user to be logged in are "protected" 
-      //and cannot be navigated to by other means if the user is not logged in.
-      return(
-        <Stack.Screen  name="Decision" component={Decision}>
-        </Stack.Screen>
-      )
-    }
   }
 
   renderToast() {
@@ -116,15 +66,14 @@ class App extends React.Component {
   render() {
     if (this.state.isFontLoaded) {
       return (
-        <View style={{ flex: 1 }}>
-          <NavigationContainer>
-            <Stack.Navigator>
-              {this.pageRendererOnLogin()}
-            </Stack.Navigator>
-          </NavigationContainer>
-          {this.renderToast()}
-
-        </View>
+        <Provider store={ store }>
+          <PersistGate loading={ null } persistor={ persistor }>
+          <View style={{ flex: 1 }}>
+            <AppNavigator showToast={this.showToast}></AppNavigator>
+            {this.renderToast()}
+          </View>
+          </PersistGate>
+        </Provider>
       )
     } else {
       return (
@@ -135,7 +84,6 @@ class App extends React.Component {
     }
   }
 }
-//<Toast ref="toast"></Toast>
 
 const styles = StyleSheet.create({
   container: {
@@ -150,5 +98,5 @@ const styles = StyleSheet.create({
   }
 });
 
-
+//so apparently, bold conflicts with fontfamily...
 export default App;

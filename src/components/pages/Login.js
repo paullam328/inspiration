@@ -7,6 +7,10 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import PlatformSpecificButton from '../parts/PlatformSpecificButton';
 import { ipAddr } from '../../config/ip'
 
+//connect:
+import { connect } from 'react-redux';
+import { logIn } from '../../actions/userCredentialSync';
+
 class Login extends React.Component {
   constructor(props) {
       super(props);
@@ -46,7 +50,8 @@ class Login extends React.Component {
     .then( result => {
       if (result.code == 200) {
         this.props.showToast(result.code + ": " + result.message);
-        this.props.setIsLoggedIn(true);
+        //this.props.setIsLoggedIn(true);
+        this.props.logIn();
       } else if (result.code == 403) {
         this.props.showToast(result.code + ": " + result.message);
       }
@@ -113,5 +118,17 @@ const inputStyles = StyleSheet.create({
   header: { fontSize:120, top:10, color: "white", fontFamily:"AdillaAndRita" }
 })
 //so apparently, bold conflicts with fontfamily...
+const mapStateToProps = state => {
+  return {
+  }
+}
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+  return {
+    logIn: () => {
+      dispatch(logIn());
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
