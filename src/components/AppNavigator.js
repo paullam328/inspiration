@@ -9,6 +9,7 @@ import Dashboard from './pages/GetInspired/Dashboard';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import TopNavbar from './parts/TopNavbar'
 
 //Redux:
 import { connect } from 'react-redux';
@@ -25,39 +26,33 @@ class AppNavigator extends React.Component {
         }
     }
 
-    pageRendererOnLogin() {
-        //if (!this.state.isLoggedIn) {
-        if (this.props.storedToken == "") {
-          return (
-            <>
-              <Stack.Screen name="Login">
-                { (props) => <Login {... props} showToast={this.props.showToast} /*setIsLoggedIn={this.setIsLoggedIn}*/ />}
-              </Stack.Screen>
-              <Stack.Screen  name="Registration">
-                { (props) => <Registration {... props} showToast={this.props.showToast} />}
-              </Stack.Screen>
-            </>
-                  
-          )
-        }
-        else {
-            //Protected routes pattern:
-            //our screens which need the user to be logged in are "protected" 
-            //and cannot be navigated to by other means if the user is not logged in.
-            return(
-                <Stack.Screen  name="Decision" component={Dashboard}>
-                </Stack.Screen>
-            )
-        }
+    renderPreLoginComponents() {
+        return (
+          <>
+            <Stack.Screen name="Login">
+              { (props) => <Login {... props} showToast={this.props.showToast} /*setIsLoggedIn={this.setIsLoggedIn}*/ />}
+            </Stack.Screen>
+            <Stack.Screen  name="Registration">
+              { (props) => <Registration {... props} showToast={this.props.showToast} />}
+            </Stack.Screen>
+          </>
+        )
     }
     
     render() {
+        //Protected routes pattern:
+        //our screens which need the user to be logged in are "protected" 
+        //and cannot be navigated to by other means if the user is not logged in.
         return (
+          <>
             <NavigationContainer>
+            {(this.props.storedToken == "") ?
               <Stack.Navigator>
-                {this.pageRendererOnLogin()}
-              </Stack.Navigator>
+                {this.renderPreLoginComponents()}
+              </Stack.Navigator> :
+              <TopNavbar />}
             </NavigationContainer>
+          </>
         )
     }
 }
@@ -65,7 +60,7 @@ class AppNavigator extends React.Component {
 const mapStateToProps = state => {
   return {
     // Takes in the file name as a key:
-    storedToken: state.userCredientialSync
+    storedToken: state.userCredentialSync
   }
 }
 
