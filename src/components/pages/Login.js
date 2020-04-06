@@ -70,7 +70,7 @@ class Login extends React.Component {
   render() {
     return (
       <View style={inputStyles.outlook}>
-        <View style={{ flex: 2, alignItems:"center"}}>
+        <View style={{ flex: 2, alignItems:"center", justifyContent:'center'}}>
           <Text style={inputStyles.header}>Inspire</Text>
         </View>
 

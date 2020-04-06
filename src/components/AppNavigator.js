@@ -47,7 +47,9 @@ class AppNavigator extends React.Component {
           <>
             <NavigationContainer>
             {(this.props.storedToken == "") ?
-              <Stack.Navigator>
+              <Stack.Navigator  screenOptions={{
+                  headerShown: false
+                }}>
                 {this.renderPreLoginComponents()}
               </Stack.Navigator> :
               <TopNavbar />}

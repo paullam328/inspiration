@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Alarm from '../pages/GetInspired/Alarm'
@@ -56,7 +56,12 @@ class TopNavbar extends React.Component {
         return (
             <Menu
                 ref={(ref) => this._menu = ref}
-                button={<FontAwesomeIcon onPress={() => this._menu.show()} icon={faUserCog}></FontAwesomeIcon>}>
+                button={<FontAwesomeIcon 
+                    size={ 30 } 
+                    paddingRight={50}
+                    style={inputStyles.headerText}
+                    onPress={() => this._menu.show()}
+                    icon={faUserCog}></FontAwesomeIcon>}>
                 <MenuItem onPress={() => this.logout()} textStyle={{color: '#000', fontSize: 16}}>Logout</MenuItem>
             </Menu>
         )
@@ -67,7 +72,12 @@ class TopNavbar extends React.Component {
         return (
             <Stack.Navigator>
                 <Stack.Screen name="Get Inspired"
-                              options={{headerRight: () => this.renderUserMenu()}}>
+                              style={inputStyles.header}
+                              options={{
+                                  headerRight: () => this.renderUserMenu(),
+                                  headerStyle: inputStyles.header,
+                                  headerTitleStyle: inputStyles.headerText
+                              }}>
                     { (props) => this.renderTabNavigator(props)}
                 </Stack.Screen>
             </Stack.Navigator>
@@ -75,6 +85,14 @@ class TopNavbar extends React.Component {
     }
 
 }
+
+const inputStyles = StyleSheet.create({
+    container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10, backgroundColor: "white"},
+    outlook: { backgroundColor: "orange", color: "white",  flex: 6, alignItems: "stretch"},
+    header: { backgroundColor:"orange" },
+    headerText: { fontSize:50, color: "white", fontFamily:"AdillaAndRita" }
+    
+  })
 
 const mapStateToProps = state => {
     return {

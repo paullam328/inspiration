@@ -57,10 +57,9 @@ class Registration extends React.Component {
   render() {
     return (
       <View style={inputStyles.outlook}>
-        <View style={{ flex: 1, alignItems:"center" }}>
+        <View style={{ flex: 2, alignItems:"center", justifyContent:'center' }}>
           <Text style={inputStyles.header}>Inspire</Text>
         </View>
-        <View style={{ flex: 1}}></View>
         <View style={{ flex: 1, alignSelf: "stretch"}}>
           <TextInput style={inputStyles.container}
             onChangeText={text => this.onChangeUsernameText(text)}
