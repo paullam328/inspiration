@@ -1,0 +1,1 @@
+export const ALARM_TYPE = Object.freeze({"STORY": 0, "QUOTE" :1});

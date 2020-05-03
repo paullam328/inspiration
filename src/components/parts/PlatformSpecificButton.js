@@ -9,18 +9,26 @@ class PlatformSpecificButton extends React.Component {
             button: { 
               marginRight:40,
               marginLeft:40,
-             marginTop:10,
+              marginTop: (!!this.props.margin && this.props.margin.length > 0) ? this.props.margin[0] : 10,
               paddingTop:10,
               paddingBottom:10,
               backgroundColor: this.props.buttonColor,
               borderRadius:10,
               borderWidth: 1,
-              borderColor: '#fff'},
+              borderColor: '#fff',
+              
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.5,
+              shadowRadius: 3
+            },
             buttonText: {
-              color:'#fff',
+              color: this.props.color,
+              fontWeight:'700',
               textAlign:'center',
               paddingLeft : 10,
-              paddingRight : 10
+              paddingRight : 10,
+              fontSize: 20
             }
           })
     }

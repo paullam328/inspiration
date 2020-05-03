@@ -45,9 +45,9 @@ class TopNavbar extends React.Component {
         return (
         <Tab.Navigator {... stackNavProps}>
             <Tab.Screen name="Alarm" component={Alarm} options={{title:"Alarm"}} />
-            <Tab.Screen name="Video" component={Video} />
-            <Tab.Screen name="Story" component={Story} />
             <Tab.Screen name="Quote" component={Quote} />
+            <Tab.Screen name="Story" component={Story} />
+            <Tab.Screen name="Video" component={Video} />
         </Tab.Navigator>
         )
     }
