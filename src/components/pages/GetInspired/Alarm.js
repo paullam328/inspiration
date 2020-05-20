@@ -20,7 +20,6 @@ export const AlarmType = Object.freeze({
 });
 
 
-
 class Alarm extends React.Component {
     constructor(props) {
         super(props);

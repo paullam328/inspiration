@@ -13,6 +13,7 @@ import Menu, {MenuItem} from "react-native-material-menu";
 
 import { connect } from 'react-redux';
 import { logOut } from '../../actions/userCredentialSync';
+import WidgetManager from '../widgets/WidgetManager';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,6 +22,9 @@ const Stack = createStackNavigator()
 class TopNavbar extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            activeWidget: null
+        }
     }
 
     _menu = null;
@@ -41,11 +45,17 @@ class TopNavbar extends React.Component {
         this.props.logOut();
     }
 
+    setActiveWidget = (activeWidget) => {
+        this.setState({activeWidget: activeWidget});
+    }
+
     renderTabNavigator(stackNavProps) {
         return (
         <Tab.Navigator {... stackNavProps}>
             <Tab.Screen name="Alarm" component={Alarm} options={{title:"Alarm"}} />
-            <Tab.Screen name="Quote" component={Quote} />
+            <Tab.Screen name="Quote">
+                { (props) => <Quote {... props} setActiveWidget={this.setActiveWidget}/>}
+            </Tab.Screen>
             <Tab.Screen name="Story" component={Story} />
             <Tab.Screen name="Video" component={Video} />
         </Tab.Navigator>
@@ -56,6 +66,7 @@ class TopNavbar extends React.Component {
         return (
             <Menu
                 ref={(ref) => this._menu = ref}
+                style={{marginTop:34}}
                 button={<FontAwesomeIcon 
                     size={ 30 } 
                     paddingRight={50}
@@ -70,8 +81,10 @@ class TopNavbar extends React.Component {
     render() {
         //Nesting navigation in a stack navigator rendering a header bar as a screen
         return (
+            <>
+            <WidgetManager activeWidget={this.state.activeWidget}></WidgetManager>
             <Stack.Navigator>
-                <Stack.Screen name="Get Inspired"
+                <Stack.Screen name="Inspire"
                               style={inputStyles.header}
                               options={{
                                   headerRight: () => this.renderUserMenu(),
@@ -81,6 +94,7 @@ class TopNavbar extends React.Component {
                     { (props) => this.renderTabNavigator(props)}
                 </Stack.Screen>
             </Stack.Navigator>
+            </>
           );
     }
 
