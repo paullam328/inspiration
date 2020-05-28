@@ -16,7 +16,7 @@ class CustomizedDropdown extends React.Component {
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#fff',
-        width: 120,
+        width: 200,
         alignItems: "center",
 
         shadowColor: '#000',
@@ -60,16 +60,18 @@ class CustomizedDropdown extends React.Component {
 
         <Menu
           ref={(ref) => this._menu = ref}
-          style={{marginTop:55,         
+          style={{
+            marginTop: 55,
             borderRadius: 10,
             borderWidth: 1,
             borderColor: '#fff',
-            width:120,
-    
+            width: 120,
+
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.5,
-            shadowRadius: 3}}
+            shadowRadius: 3
+          }}
           button={
             <TouchableOpacity
               onPress={() => this.showMenu(true)}
@@ -81,7 +83,13 @@ class CustomizedDropdown extends React.Component {
                   icon={this.props.icon}
                   size={12}
                   color="gray" />
+
                 <Text style={{ ...this.inputStyles.buttonTitle, ...this.props.textStyle }}>{this.props.title.charAt(0).toUpperCase() + this.props.title.slice(1)}</Text>
+                
+                <FontAwesomeIcon
+                  icon={faCaretDown}
+                  style={{ position: "absolute", right: -5, justifyContent: 'center', top: this.height * 1.5 }}
+                  color="gray" />
               </View>
               <Text style={{ ...this.inputStyles.buttonText, ...this.props.textStyle }}>{this.props.activeItem}</Text>
             </TouchableOpacity>
@@ -103,10 +111,6 @@ class CustomizedDropdown extends React.Component {
             })
           }
         </Menu>
-        <FontAwesomeIcon
-          icon={faCaretDown}
-          style={{ position: "absolute", right: 11, justifyContent: 'center', top: this.height * 1.5 }}
-          color="gray" />
       </>
     );
 

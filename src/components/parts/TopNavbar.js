@@ -9,7 +9,7 @@ import Quote from '../pages/GetInspired/Quote'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faUserCog } from '@fortawesome/free-solid-svg-icons'
-import Menu, {MenuItem} from "react-native-material-menu";
+import Menu, { MenuItem } from "react-native-material-menu";
 
 import { connect } from 'react-redux';
 import { logOut } from '../../actions/userCredentialSync';
@@ -46,19 +46,21 @@ class TopNavbar extends React.Component {
     }
 
     setActiveWidget = (activeWidget) => {
-        this.setState({activeWidget: activeWidget});
+        if (!(!!this.state.activeWidget)) {
+            this.setState({ activeWidget: activeWidget });
+        }
     }
 
     renderTabNavigator(stackNavProps) {
         return (
-        <Tab.Navigator {... stackNavProps}>
-            <Tab.Screen name="Alarm" component={Alarm} options={{title:"Alarm"}} />
-            <Tab.Screen name="Quote">
-                { (props) => <Quote {... props} setActiveWidget={this.setActiveWidget}/>}
-            </Tab.Screen>
-            <Tab.Screen name="Story" component={Story} />
-            <Tab.Screen name="Video" component={Video} />
-        </Tab.Navigator>
+            <Tab.Navigator {...stackNavProps}>
+                <Tab.Screen name="Alarm" component={Alarm} options={{ title: "Alarm" }} />
+                <Tab.Screen name="Quote">
+                    {(props) => <Quote {...props} setActiveWidget={this.setActiveWidget} />}
+                </Tab.Screen>
+                <Tab.Screen name="Story" component={Story} />
+                <Tab.Screen name="Video" component={Video} />
+            </Tab.Navigator>
         )
     }
 
@@ -66,59 +68,65 @@ class TopNavbar extends React.Component {
         return (
             <Menu
                 ref={(ref) => this._menu = ref}
-                style={{marginTop:34}}
-                button={<FontAwesomeIcon 
-                    size={ 30 } 
+                style={{ marginTop: 34 }}
+                button={<FontAwesomeIcon
+                    size={30}
                     paddingRight={50}
                     style={inputStyles.headerText}
                     onPress={() => this._menu.show()}
                     icon={faUserCog}></FontAwesomeIcon>}>
-                <MenuItem onPress={() => this.logout()} textStyle={{color: '#000', fontSize: 16}}>Logout</MenuItem>
+                <MenuItem onPress={() => this.logout()} textStyle={{ color: '#000', fontSize: 16 }}>Logout</MenuItem>
             </Menu>
         )
+    }
+
+    destroyActiveWidget = () => {
+        this.setState({ activeWidget: null });
     }
 
     render() {
         //Nesting navigation in a stack navigator rendering a header bar as a screen
         return (
             <>
-            <WidgetManager activeWidget={this.state.activeWidget}></WidgetManager>
-            <Stack.Navigator>
-                <Stack.Screen name="Inspire"
-                              style={inputStyles.header}
-                              options={{
-                                  headerRight: () => this.renderUserMenu(),
-                                  headerStyle: inputStyles.header,
-                                  headerTitleStyle: inputStyles.headerText
-                              }}>
-                    { (props) => this.renderTabNavigator(props)}
-                </Stack.Screen>
-            </Stack.Navigator>
+                <WidgetManager
+                    activeWidget={this.state.activeWidget}
+                    destroyActiveWidget={this.destroyActiveWidget}></WidgetManager>
+                <Stack.Navigator>
+                    <Stack.Screen name="Inspire"
+                        style={inputStyles.header}
+                        options={{
+                            headerRight: () => this.renderUserMenu(),
+                            headerStyle: inputStyles.header,
+                            headerTitleStyle: inputStyles.headerText
+                        }}>
+                        {(props) => this.renderTabNavigator(props)}
+                    </Stack.Screen>
+                </Stack.Navigator>
             </>
-          );
+        );
     }
 
 }
 
 const inputStyles = StyleSheet.create({
-    container: { height: 40, borderColor: 'gray', borderWidth: 1, margin:20, paddingLeft:10, backgroundColor: "white"},
-    outlook: { backgroundColor: "orange", color: "white",  flex: 6, alignItems: "stretch"},
-    header: { backgroundColor:"orange" },
-    headerText: { fontSize:50, color: "white", fontFamily:"AdillaAndRita" }
-    
-  })
+    container: { height: 40, borderColor: 'gray', borderWidth: 1, margin: 20, paddingLeft: 10, backgroundColor: "white" },
+    outlook: { backgroundColor: "orange", color: "white", flex: 6, alignItems: "stretch" },
+    header: { backgroundColor: "orange" },
+    headerText: { fontSize: 50, color: "white", fontFamily: "AdillaAndRita" }
+
+})
 
 const mapStateToProps = state => {
     return {
     }
-  }
-  
-  const mapDispatchToProps = dispatch => {
+}
+
+const mapDispatchToProps = dispatch => {
     return {
-      logOut: () => {
-        dispatch(logOut());
-      }
+        logOut: () => {
+            dispatch(logOut());
+        }
     }
-  }
-  
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(TopNavbar);
